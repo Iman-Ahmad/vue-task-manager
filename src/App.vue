@@ -4,6 +4,13 @@ import HelloWorld from './components/HelloWorld.vue'
 import {ref} from 'vue'
 
 const name = ref('')
+const names = ref(['Iman', 'Meera', 'Jamila', 'Reem'])
+
+function addName() {
+  if (name.value) {
+  names.value.push(name.value)
+  }
+}
 </script>
 
 <template>
@@ -11,7 +18,17 @@ const name = ref('')
 
   <input v-model="name" placeholder="Write your name"/>
 
-  <p>هذا أول تعديل عملناه بإيدنا 🚀</p>
+  <button @click="addName">Add a name</button>
+
+  <ul>
+    <li v-for="person in names" :key="person">
+    {{ person}}
+    </li>
+  </ul>
+
+  <p v-if="name">Welcome {{name}}</p>
+
+  <p v-else>Type your name 🚀</p>
 </template>
 
 <style scoped>
