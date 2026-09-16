@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import {ref} from 'vue'
+    import { RouterLink, RouterView } from 'vue-router'
+    import HelloWorld from './components/HelloWorld.vue'
+    import {computed, ref} from 'vue'
+    import NameList from './components/NameList.vue'
 
-const name = ref('')
-const names = ref(['Iman', 'Meera', 'Jamila', 'Reem'])
+    const name = ref('')
+    const names = ref(['Iman', 'Meera', 'Jamila', 'Reem'])
+    const totalNames = computed (() => names.value.length)
+    const namesStartingWithI = computed (() => names.value.filter(person => person.startsWith('I')))
 
-function addName() {
-  if (name.value) {
-  names.value.push(name.value)
-  }
-}
+    function addName() {
+      if (name.value) {
+      names.value.push(name.value)
+      name.value = ''
+      }
+    }
 </script>
 
 <template>
@@ -20,12 +24,18 @@ function addName() {
 
   <button @click="addName">Add a name</button>
 
+  <NameList :names="names" />
+
+  <p>Names starting with I:</p>
+
   <ul>
-    <li v-for="person in names" :key="person">
-    {{ person}}
+    <li v-for="person in namesStartingWithI" :key="person">
+      {{person}}
     </li>
   </ul>
 
+  <p>Total names: {{names.length}}</p>
+  <p>Total computed names: {{totalNames}}</p>
   <p v-if="name">Welcome {{name}}</p>
 
   <p v-else>Type your name 🚀</p>
