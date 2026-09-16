@@ -1,19 +1,35 @@
 <script setup lang="ts">
-    import { RouterLink, RouterView } from 'vue-router'
-    import HelloWorld from './components/HelloWorld.vue'
     import {computed, ref} from 'vue'
     import NameList from './components/NameList.vue'
 
+    let nextPersonId = 5
     const name = ref('')
-    const names = ref(['Iman', 'Meera', 'Jamila', 'Reem'])
+    type Person = {
+      id: number
+      name: string
+    }
+    const names = ref<Person[]>([
+      {id: 1, name: 'Iman'},
+      {id: 2, name: 'Meera'},
+      {id: 3, name: 'Jamila'},
+      {id: 4, name: 'Reem'}
+    ])
     const totalNames = computed (() => names.value.length)
-    const namesStartingWithI = computed (() => names.value.filter(person => person.startsWith('I')))
+    const namesStartingWithI = computed (() => names.value.filter(person => person.name.startsWith('I')))
 
     function addName() {
       if (name.value) {
-      names.value.push(name.value)
+      names.value.push({
+        id: nextPersonId, name: name.value
+      })
+
+      nextPersonId++
       name.value = ''
       }
+    }
+
+    function handleDeleteName(id: number){
+      names.value= names.value.filter(person => person.id !== id)
     }
 </script>
 
@@ -24,13 +40,13 @@
 
   <button @click="addName">Add a name</button>
 
-  <NameList :names="names" />
+  <NameList :names="names" @deleteName="handleDeleteName"/>
 
   <p>Names starting with I:</p>
 
   <ul>
-    <li v-for="person in namesStartingWithI" :key="person">
-      {{person}}
+    <li v-for="person in namesStartingWithI" :key="person.id">
+      {{person.name}}
     </li>
   </ul>
 
