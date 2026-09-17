@@ -1,13 +1,11 @@
 <script setup lang="ts">
     import {computed, ref} from 'vue'
     import NameList from './components/NameList.vue'
+    import type {person} from './types'
 
     let nextPersonId = 5
     const name = ref('')
-    type Person = {
-      id: number
-      name: string
-    }
+
     const names = ref<Person[]>([
       {id: 1, name: 'Iman'},
       {id: 2, name: 'Meera'},

@@ -1,8 +1,5 @@
 <script setup lang="ts">
-type Person = {
-    id: number
-    name: string
-}
+import type {person} from '../types'
 
 defineProps<{
     names: Person[]
