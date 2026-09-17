@@ -2,9 +2,9 @@
     import {computed, ref} from 'vue'
     import NameList from './components/NameList.vue'
     import type {person} from './types'
+    import NameForm from './components/NameForm.vue'
 
     let nextPersonId = 5
-    const name = ref('')
 
     const names = ref<Person[]>([
       {id: 1, name: 'Iman'},
@@ -15,31 +15,25 @@
     const totalNames = computed (() => names.value.length)
     const namesStartingWithI = computed (() => names.value.filter(person => person.name.startsWith('I')))
 
-    function addName() {
-      if (name.value) {
-      names.value.push({
-        id: nextPersonId, name: name.value
-      })
-
-      nextPersonId++
-      name.value = ''
-      }
-    }
 
     function handleDeleteName(id: number){
       names.value= names.value.filter(person => person.id !== id)
+    }
+
+    function handleAddName(name: string) {
+      names.value.push({
+        id: nextPersonId,
+        name: name
+      })
+      nextPersonId++
     }
 </script>
 
 <template>
   <h1>Hello {{name}}!</h1>
 
-  <input v-model="name" placeholder="Write your name"/>
-
-  <button @click="addName">Add a name</button>
-
   <NameList :names="names" @deleteName="handleDeleteName"/>
-
+  <NameForm @addName="handleAddName"/>
   <p>Names starting with I:</p>
 
   <ul>
@@ -48,6 +42,7 @@
     </li>
   </ul>
 
+  
   <p>Total names: {{names.length}}</p>
   <p>Total computed names: {{totalNames}}</p>
   <p v-if="name">Welcome {{name}}</p>
