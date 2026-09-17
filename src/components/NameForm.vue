@@ -1,17 +1,27 @@
 <script setup lang="ts">
-import {ref} from 'vue'
 
-const emit = defineEmits<{
-    addName: [name:string]
+const props = defineProps<{
+    name: string
 }>()
 
-function handleAddNameRequest() {
-    emit('addName', name.value)
+const emit = defineEmits<{
+    addName: [name: string]
+    'update:name': [name: string]
+}>()
+
+
+function handleAddNameRequest(name: string) {
+    emit('addName', name)
 }
-const name = ref('')
 </script>
 
 <template>
-    <input v-model="name" placeholder="Write your name"/>
-    <button @click="handleAddNameRequest">Add your name</button>
+    <input
+    :value="props.name"
+    @input="emit('update:name', ($event.target as HTMLInputElement).value)"
+    placeholder="Write your name"/>
+
+    <button @click="handleAddNameRequest(props.name)">
+    Add your name
+    </button>
 </template>

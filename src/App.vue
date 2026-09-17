@@ -1,10 +1,11 @@
 <script setup lang="ts">
     import {computed, ref} from 'vue'
     import NameList from './components/NameList.vue'
-    import type {person} from './types'
+    import type {Person} from './types'
     import NameForm from './components/NameForm.vue'
 
     let nextPersonId = 5
+    const name = ref('')
 
     const names = ref<Person[]>([
       {id: 1, name: 'Iman'},
@@ -32,8 +33,12 @@
 <template>
   <h1>Hello {{name}}!</h1>
 
+  <NameForm  
+  v-model:name="name"
+  @addName="handleAddName"
+  />
+
   <NameList :names="names" @deleteName="handleDeleteName"/>
-  <NameForm @addName="handleAddName"/>
   <p>Names starting with I:</p>
 
   <ul>
