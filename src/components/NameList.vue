@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type {person} from '../types'
+import type {Task} from '../types'
 
 defineProps<{
-    names: Person[]
+    names: Task[]
 }>()
 
 const emit = defineEmits<{
@@ -10,8 +10,8 @@ const emit = defineEmits<{
     toggleCompleted: [id: number]
 }>()
 
-function handleDeleteRequest(person: Person) {
-    emit('deleteName', person.id)
+function handleDeleteRequest(task: Task) {
+    emit('deleteName', task.id)
 }
 
 </script>
@@ -25,7 +25,7 @@ function handleDeleteRequest(person: Person) {
             @change= "emit('toggleCompleted', person.id)"
             >
 
-            {{person.name}}
+            {{person.title}}
             
             <button @click="handleDeleteRequest(person)">Delete</button>
 

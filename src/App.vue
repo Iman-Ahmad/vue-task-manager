@@ -1,27 +1,27 @@
 <script setup lang="ts">
     import {computed, ref, watch} from 'vue'
     import NameList from './components/NameList.vue'
-    import type {Person} from './types'
+    import type {Task} from './types'
     import NameForm from './components/NameForm.vue'
 
     const name = ref('')
 
-    function loadSavedNames(): Person[] {
+    function loadSavedNames(): Task[] {
       const savedNames = localStorage.getItem('names')
 
       if (!savedNames) {
         return [
-          {id: 1, name: 'Iman', completed: false},
-          {id: 2, name: 'Meera', completed: false},
-          {id: 3, name: 'Jamila', completed: false},
-          {id: 4, name: 'Reem', completed: false}
+          {id: 1, title: 'Iman', completed: false},
+          {id: 2, title: 'Meera', completed: false},
+          {id: 3, title: 'Jamila', completed: false},
+          {id: 4, title: 'Reem', completed: false}
         ]
       }
 
       return JSON.parse(savedNames)
     }
 
-    const names = ref<Person[]>(loadSavedNames())
+    const names = ref<Task[]>(loadSavedNames())
 
     let nextPersonId = names.value.length
       ? Math.max(...names.value.map(person => person.id)) + 1
@@ -36,21 +36,21 @@
     )
 
     const totalNames = computed (() => names.value.length)
-    const namesStartingWithI = computed (() => names.value.filter(person => person.name.startsWith('I')))
+    const namesStartingWithI = computed (() => names.value.filter(person => person.title.startsWith('I')))
 
 
     function handleDeleteName(id: number){
-      names.value= names.value.filter(person => person.id !== id)
+      names.value= names.value.filter(task => task.id !== id)
     }
 
     function handleToggleCompleted(id: number) {
-      const person= names.value.find(person => person.id === id)
+      const task= names.value.find(task => task.id === id)
 
-      if (!person) {
+      if (!task) {
         return
       }
 
-      person.completed = !person.completed
+      task.completed = !task.completed
     }
 
     function handleAddName(name: string) {
@@ -64,7 +64,7 @@
 
       names.value.push({
         id: nextPersonId,
-        name: name,
+        title: name,
         completed: false
       })
       nextPersonId++
@@ -75,7 +75,7 @@
   <h1>Hello {{name}}!</h1>
 
   <NameForm  
-  v-model:name="name"
+  v-model:title="name"
   @addName="handleAddName"
   />
 
@@ -89,7 +89,7 @@
 
   <ul>
     <li v-for="person in namesStartingWithI" :key="person.id">
-      {{person.name}}
+      {{person.title}}
     </li>
   </ul>
 

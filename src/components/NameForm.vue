@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
 const props = defineProps<{
-    name: string
+    title: string
 }>()
 
 const emit = defineEmits<{
     addName: [name: string]
-    'update:name': [name: string]
+    'update:title': [title: string]
 }>()
 
 
@@ -17,11 +17,11 @@ function handleAddNameRequest(name: string) {
 
 <template>
     <input
-    :value="props.name"
-    @input="emit('update:name', ($event.target as HTMLInputElement).value)"
+    :value="props.title"
+    @input="emit('update:title', ($event.target as HTMLInputElement).value)"
     placeholder="Write your name"/>
 
-    <button @click="handleAddNameRequest(props.name)">
+    <button @click="handleAddNameRequest(props.title)">
     Add your name
     </button>
 </template>

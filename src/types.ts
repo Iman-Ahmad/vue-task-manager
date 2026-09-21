@@ -1,5 +1,5 @@
-export type person = {
+export type Task = {
     id: number 
-    name: string
+    title: string
     completed: boolean
 }
