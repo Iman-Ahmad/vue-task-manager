@@ -1,18 +1,40 @@
 <script setup lang="ts">
-    import {computed, ref} from 'vue'
+    import {computed, ref, watch} from 'vue'
     import NameList from './components/NameList.vue'
     import type {Person} from './types'
     import NameForm from './components/NameForm.vue'
 
-    let nextPersonId = 5
     const name = ref('')
 
-    const names = ref<Person[]>([
-      {id: 1, name: 'Iman'},
-      {id: 2, name: 'Meera'},
-      {id: 3, name: 'Jamila'},
-      {id: 4, name: 'Reem'}
-    ])
+    function loadSavedNames(): Person[] {
+      const savedNames = localStorage.getItem('names')
+
+      if (!savedNames) {
+        return [
+          {id: 1, name: 'Iman'},
+          {id: 2, name: 'Meera'},
+          {id: 3, name: 'Jamila'},
+          {id: 4, name: 'Reem'}
+        ]
+      }
+
+      return JSON.parse(savedNames)
+    }
+
+    const names = ref<Person[]>(loadSavedNames())
+
+    let nextPersonId = names.value.length
+      ? Math.max(...names.value.map(person => person.id)) + 1
+      : 1
+
+    watch(
+      names,
+      (newNames) => {
+        localStorage.setItem('names', JSON.stringify(newNames))
+      },
+      { deep: true }
+    )
+
     const totalNames = computed (() => names.value.length)
     const namesStartingWithI = computed (() => names.value.filter(person => person.name.startsWith('I')))
 
@@ -22,6 +44,14 @@
     }
 
     function handleAddName(name: string) {
+      if (!name.trim()){
+        return
+      }
+
+      if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(name)){
+        return
+      }
+
       names.value.push({
         id: nextPersonId,
         name: name
