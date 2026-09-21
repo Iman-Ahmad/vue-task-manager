@@ -11,10 +11,10 @@
 
       if (!savedNames) {
         return [
-          {id: 1, title: 'Iman', completed: false},
-          {id: 2, title: 'Meera', completed: false},
-          {id: 3, title: 'Jamila', completed: false},
-          {id: 4, title: 'Reem', completed: false}
+          {id: 1, title: 'Cleaning', completed: false},
+          {id: 2, title: 'Running', completed: false},
+          {id: 3, title: 'Coding', completed: false},
+          {id: 4, title: 'Cooking', completed: false}
         ]
       }
 
@@ -77,12 +77,12 @@
 
   <TaskForm  
   v-model:title="name"
-  @addName="handleAddTask"
+  @addTask="handleAddTask"
   />
 
   <TaskList
   :tasks="tasks"
-  @deleteName="handleDeleteTask"
+  @deleteTask="handleDeleteTask"
   @toggleCompleted= "handleToggleCompleted"
   />
 

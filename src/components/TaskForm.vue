@@ -5,13 +5,13 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    addName: [name: string]
+    addTask: [task: string]
     'update:title': [title: string]
 }>()
 
 
-function handleAddNameRequest(name: string) {
-    emit('addName', name)
+function handleAddTaskRequest(task: string) {
+    emit('addTask', task)
 }
 </script>
 
@@ -19,9 +19,9 @@ function handleAddNameRequest(name: string) {
     <input
     :value="props.title"
     @input="emit('update:title', ($event.target as HTMLInputElement).value)"
-    placeholder="Write your name"/>
+    placeholder="Write a new task"/>
 
-    <button @click="handleAddNameRequest(props.title)">
-    Add your name
+    <button @click="handleAddTaskRequest(props.title)">
+    Add
     </button>
 </template>

@@ -6,12 +6,12 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-    deleteName: [id: number]
+    deleteTask: [id: number]
     toggleCompleted: [id: number]
 }>()
 
-function handleDeleteRequest(task: Task) {
-    emit('deleteName', task.id)
+function handleDeleteTaskRequest(task: Task) {
+    emit('deleteTask', task.id)
 }
 
 </script>
@@ -27,7 +27,7 @@ function handleDeleteRequest(task: Task) {
 
             {{task.title}}
             
-            <button @click="handleDeleteRequest(task)">Delete</button>
+            <button @click="handleDeleteTaskRequest(task)">Delete</button>
 
         </li>
     </ul>
