@@ -7,6 +7,7 @@ defineProps<{
 
 const emit = defineEmits<{
     deleteName: [id: number]
+    toggleCompleted: [id: number]
 }>()
 
 function handleDeleteRequest(person: Person) {
@@ -18,8 +19,16 @@ function handleDeleteRequest(person: Person) {
 <template>
     <ul>
         <li v-for="person in names" :key="person.id">
+            <input
+            type = "checkbox"
+            :checked="person.completed"
+            @change= "emit('toggleCompleted', person.id)"
+            >
+
             {{person.name}}
+            
             <button @click="handleDeleteRequest(person)">Delete</button>
+
         </li>
     </ul>
 </template>

@@ -11,10 +11,10 @@
 
       if (!savedNames) {
         return [
-          {id: 1, name: 'Iman'},
-          {id: 2, name: 'Meera'},
-          {id: 3, name: 'Jamila'},
-          {id: 4, name: 'Reem'}
+          {id: 1, name: 'Iman', completed: false},
+          {id: 2, name: 'Meera', completed: false},
+          {id: 3, name: 'Jamila', completed: false},
+          {id: 4, name: 'Reem', completed: false}
         ]
       }
 
@@ -43,6 +43,16 @@
       names.value= names.value.filter(person => person.id !== id)
     }
 
+    function handleToggleCompleted(id: number) {
+      const person= names.value.find(person => person.id === id)
+
+      if (!person) {
+        return
+      }
+
+      person.completed = !person.completed
+    }
+
     function handleAddName(name: string) {
       if (!name.trim()){
         return
@@ -54,7 +64,8 @@
 
       names.value.push({
         id: nextPersonId,
-        name: name
+        name: name,
+        completed: false
       })
       nextPersonId++
     }
@@ -68,7 +79,12 @@
   @addName="handleAddName"
   />
 
-  <NameList :names="names" @deleteName="handleDeleteName"/>
+  <NameList
+  :names="names"
+  @deleteName="handleDeleteName"
+  @toggleCompleted= "handleToggleCompleted"
+  />
+
   <p>Names starting with I:</p>
 
   <ul>
