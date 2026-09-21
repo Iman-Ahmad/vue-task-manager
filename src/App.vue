@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import {computed, ref, watch} from 'vue'
-    import NameList from './components/NameList.vue'
+    import TaskForm from './components/TaskForm.vue'
     import type {Task} from './types'
-    import NameForm from './components/NameForm.vue'
+    import TaskList from './components/TaskList.vue'
 
     const name = ref('')
 
@@ -21,30 +21,31 @@
       return JSON.parse(savedNames)
     }
 
-    const names = ref<Task[]>(loadSavedNames())
+    const tasks = ref<Task[]>(loadSavedNames())
 
-    let nextPersonId = names.value.length
-      ? Math.max(...names.value.map(person => person.id)) + 1
+    let nextTaskId = tasks.value.length
+      ? Math.max(...tasks.value.map(task => task.id)) + 1
       : 1
 
     watch(
-      names,
-      (newNames) => {
-        localStorage.setItem('names', JSON.stringify(newNames))
+      tasks,
+      (newTasks) => {
+        localStorage.setItem('names', JSON.stringify(newTasks))
       },
       { deep: true }
     )
 
-    const totalNames = computed (() => names.value.length)
-    const namesStartingWithI = computed (() => names.value.filter(person => person.title.startsWith('I')))
+    const totalTasks = computed (() => tasks.value.length)
+    const tasksStartingWithI = computed (() =>
+    tasks.value.filter(task => task.title.startsWith('I')))
 
 
-    function handleDeleteName(id: number){
-      names.value= names.value.filter(task => task.id !== id)
+    function handleDeleteTask(id: number){
+      tasks.value= tasks.value.filter(task => task.id !== id)
     }
 
     function handleToggleCompleted(id: number) {
-      const task= names.value.find(task => task.id === id)
+      const task= tasks.value.find(task => task.id === id)
 
       if (!task) {
         return
@@ -53,49 +54,49 @@
       task.completed = !task.completed
     }
 
-    function handleAddName(name: string) {
-      if (!name.trim()){
+    function handleAddTask(title: string) {
+      if (!title.trim()){
         return
       }
 
-      if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(name)){
+      if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(title)){
         return
       }
 
-      names.value.push({
-        id: nextPersonId,
-        title: name,
+      tasks.value.push({
+        id: nextTaskId,
+        title: title,
         completed: false
       })
-      nextPersonId++
+      nextTaskId++
     }
 </script>
 
 <template>
   <h1>Hello {{name}}!</h1>
 
-  <NameForm  
+  <TaskForm  
   v-model:title="name"
-  @addName="handleAddName"
+  @addName="handleAddTask"
   />
 
-  <NameList
-  :names="names"
-  @deleteName="handleDeleteName"
+  <TaskList
+  :tasks="tasks"
+  @deleteName="handleDeleteTask"
   @toggleCompleted= "handleToggleCompleted"
   />
 
-  <p>Names starting with I:</p>
+  <p>Tasks starting with I:</p>
 
   <ul>
-    <li v-for="person in namesStartingWithI" :key="person.id">
-      {{person.title}}
+    <li v-for="task in tasksStartingWithI" :key="task.id">
+      {{task.title}}
     </li>
   </ul>
 
   
-  <p>Total names: {{names.length}}</p>
-  <p>Total computed names: {{totalNames}}</p>
+  <p>Total tasks: {{tasks.length}}</p>
+  <p>Total computed tasks: {{totalTasks}}</p>
   <p v-if="name">Welcome {{name}}</p>
 
   <p v-else>Type your name 🚀</p>

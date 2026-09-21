@@ -2,7 +2,7 @@
 import type {Task} from '../types'
 
 defineProps<{
-    names: Task[]
+    tasks: Task[]
 }>()
 
 const emit = defineEmits<{
@@ -18,16 +18,16 @@ function handleDeleteRequest(task: Task) {
 
 <template>
     <ul>
-        <li v-for="person in names" :key="person.id">
+        <li v-for="task in tasks" :key="task.id">
             <input
             type = "checkbox"
-            :checked="person.completed"
-            @change= "emit('toggleCompleted', person.id)"
+            :checked="task.completed"
+            @change= "emit('toggleCompleted', task.id)"
             >
 
-            {{person.title}}
+            {{task.title}}
             
-            <button @click="handleDeleteRequest(person)">Delete</button>
+            <button @click="handleDeleteRequest(task)">Delete</button>
 
         </li>
     </ul>
