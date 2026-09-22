@@ -60,13 +60,15 @@
       }
 
       return tasks.value
-    }
-
-    )
+    })
 
 
     function handleDeleteTask(id: number){
       tasks.value= tasks.value.filter(task => task.id !== id)
+    }
+
+    function handleClearCompleted(){
+      tasks.value = tasks.value.filter(task => !task.completed)
     }
 
     function handleToggleCompleted(id: number) {
@@ -116,6 +118,10 @@
 
     <button @click="selectedFilter = 'completed'">
       Completed
+    </button>
+
+    <button @click="handleClearCompleted">
+      Clear completed tasks
     </button>
   </div>
 
