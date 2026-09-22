@@ -23,6 +23,8 @@
 
     const tasks = ref<Task[]>(loadSavedNames())
 
+    const selectedFilter = ref<'all' | 'active' | 'completed'>('all')
+
     let nextTaskId = tasks.value.length
       ? Math.max(...tasks.value.map(task => task.id)) + 1
       : 1
@@ -38,6 +40,20 @@
     const totalTasks = computed (() => tasks.value.length)
     const tasksStartingWithI = computed (() =>
     tasks.value.filter(task => task.title.startsWith('I')))
+
+    const filteredTasks = computed(() => {
+      if (selectedFilter.value === 'active') {
+        return tasks.value.filter(task => !task.completed)
+      }
+
+      if (selectedFilter.value === 'completed') {
+        return tasks.value.filter(task => task.completed)
+      }
+
+      return tasks.value
+    }
+
+    )
 
 
     function handleDeleteTask(id: number){
@@ -80,8 +96,22 @@
   @addTask="handleAddTask"
   />
 
+  <div>
+    <button @click="selectedFilter = 'all'">
+      all
+    </button>
+
+    <button @click="selectedFilter = 'active'">
+      Active
+    </button>
+
+    <button @click="selectedFilter = 'completed'">
+      Completed
+    </button>
+  </div>
+
   <TaskList
-  :tasks="tasks"
+  :tasks="filteredTasks"
   @deleteTask="handleDeleteTask"
   @toggleCompleted= "handleToggleCompleted"
   />
