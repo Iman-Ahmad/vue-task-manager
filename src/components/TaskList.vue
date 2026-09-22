@@ -17,18 +17,57 @@ function handleDeleteTaskRequest(task: Task) {
 </script>
 
 <template>
-    <ul>
-        <li v-for="task in tasks" :key="task.id">
-            <input
-            type = "checkbox"
-            :checked="task.completed"
-            @change= "emit('toggleCompleted', task.id)"
-            >
+    <ul class="task-list">
+        <li v-for="task in tasks" :key="task.id" :class="{completed: task.completed}">
+            <div class="task-content">
+                <input
+                type = "checkbox"
+                :checked="task.completed"
+                @change= "emit('toggleCompleted', task.id)"
+                >
 
-            {{task.title}}
-            
+                {{task.title}}
+            </div>
+
             <button @click="handleDeleteTaskRequest(task)">Delete</button>
 
         </li>
     </ul>
 </template>
+
+<style scoped>
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
+}
+
+.task-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.task-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.task-content span {
+  overflow-wrap: anywhere;
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.task-list button {
+  flex-shrink: 0;
+}
+</style>

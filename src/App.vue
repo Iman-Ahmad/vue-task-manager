@@ -100,116 +100,104 @@
 </script>
 
 <template>
-  <h1>Hello {{name}}!</h1>
+  <main class="page">
+    <h1>Hello {{name}}!</h1>
 
-  <TaskForm  
-  v-model:title="name"
-  @addTask="handleAddTask"
-  />
+    <div class="task-form">
+    <TaskForm  
+    v-model:title="name"
+    @addTask="handleAddTask"
+    />
+    </div>
 
-  <div>
-    <button @click="selectedFilter = 'all'">
-      all
-    </button>
+    <div class="filters">
+      <button @click="selectedFilter = 'all'">
+        all
+      </button>
 
-    <button @click="selectedFilter = 'active'">
-      Active
-    </button>
+      <button @click="selectedFilter = 'active'">
+        Active
+      </button>
 
-    <button @click="selectedFilter = 'completed'">
-      Completed
-    </button>
+      <button @click="selectedFilter = 'completed'">
+        Completed
+      </button>
 
-    <button @click="handleClearCompleted">
-      Clear completed tasks
-    </button>
-  </div>
+      <button @click="handleClearCompleted">
+        Clear completed tasks
+      </button>
+    </div>
 
-  <div>
-    <p>Total: {{totalTasks}}</p>
-    <p>Active: {{activeTasks}}</p>
-    <p>Completed: {{completedTasks}}</p>
-  </div>
+    <div class="task-counts">
+      <div>Total: {{totalTasks}}</div>
+      <div>Active: {{activeTasks}}</div>
+      <div>Completed: {{completedTasks}}</div>
+    </div>
 
-  <TaskList
-  :tasks="filteredTasks"
-  @deleteTask="handleDeleteTask"
-  @toggleCompleted= "handleToggleCompleted"
-  />
+    <TaskList
+    :tasks="filteredTasks"
+    @deleteTask="handleDeleteTask"
+    @toggleCompleted= "handleToggleCompleted"
+    />
 
-  <p>Tasks starting with I:</p>
+    <p>Tasks starting with I:</p>
 
-  <ul>
-    <li v-for="task in tasksStartingWithI" :key="task.id">
-      {{task.title}}
-    </li>
-  </ul>
+    <ul>
+      <li v-for="task in tasksStartingWithI" :key="task.id">
+        {{task.title}}
+      </li>
+    </ul>
 
-  <p v-if="name">Welcome {{name}}</p>
+    <p v-if="name">
+      Welcome {{name}}
+    </p>
 
-  <p v-else>Type your name 🚀</p>
+    <p v-else>
+      Type your name 🚀
+    </p>
+  </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  .page {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  h1 {
+    margim-bottom: 24px;
   }
 
-  header .wrapper {
+  .task-form {
+    margin-bottom: 24px;
+  }
+
+  .filters {
     display: flex;
-    place-items: flex-start;
     flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
   }
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .filters button {
+    padding: 8px 14px;
   }
+
+  .task-counts {
+    display: flex;
+    gap: 24;
+    margin-bottom: 24px;
+    padding: 12px 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .task-counts div {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
 }
 </style>
