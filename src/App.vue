@@ -4,12 +4,12 @@
     import type {Task} from './types'
     import TaskList from './components/TaskList.vue'
 
-    const name = ref('')
+    const taskTitle = ref('')
 
-    function loadSavedNames(): Task[] {
-      const savedNames = localStorage.getItem('names')
+    function loadSavedTasks(): Task[] {
+      const savedTasks = localStorage.getItem('tasks')
 
-      if (!savedNames) {
+      if (!savedTasks) {
         return [
           {id: 1, title: 'Cleaning', completed: false},
           {id: 2, title: 'Running', completed: false},
@@ -18,10 +18,10 @@
         ]
       }
 
-      return JSON.parse(savedNames)
+      return JSON.parse(savedTasks)
     }
 
-    const tasks = ref<Task[]>(loadSavedNames())
+    const tasks = ref<Task[]>(loadSavedTasks())
 
     const selectedFilter = ref<'all' | 'active' | 'completed'>('all')
 
@@ -32,7 +32,7 @@
     watch(
       tasks,
       (newTasks) => {
-        localStorage.setItem('names', JSON.stringify(newTasks))
+        localStorage.setItem('tasks', JSON.stringify(newTasks))
       },
       { deep: true }
     )
@@ -47,8 +47,6 @@
     tasks.value.filter(task => !task.completed).length
     )
 
-    const tasksStartingWithI = computed (() =>
-    tasks.value.filter(task => task.title.startsWith('I')))
 
     const filteredTasks = computed(() => {
       if (selectedFilter.value === 'active') {
@@ -101,11 +99,11 @@
 
 <template>
   <main class="page">
-    <h1>Hello {{name}}!</h1>
+    <h1>Ready to complete your tasks?!</h1>
 
     <div class="task-form">
     <TaskForm  
-    v-model:title="name"
+    v-model:title="taskTitle"
     @addTask="handleAddTask"
     />
     </div>
@@ -140,21 +138,6 @@
     @toggleCompleted= "handleToggleCompleted"
     />
 
-    <p>Tasks starting with I:</p>
-
-    <ul>
-      <li v-for="task in tasksStartingWithI" :key="task.id">
-        {{task.title}}
-      </li>
-    </ul>
-
-    <p v-if="name">
-      Welcome {{name}}
-    </p>
-
-    <p v-else>
-      Type your name 🚀
-    </p>
   </main>
 </template>
 
@@ -168,7 +151,7 @@
   }
 
   h1 {
-    margim-bottom: 24px;
+    margin-bottom: 24px;
   }
 
   .task-form {
@@ -188,7 +171,7 @@
 
   .task-counts {
     display: flex;
-    gap: 24;
+    gap: 24px;
     margin-bottom: 24px;
     padding: 12px 0;
     border-top: 1px solid var(--color-border);
