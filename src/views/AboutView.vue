@@ -1,6 +1,14 @@
+<script setup lang="ts">
+import {useRoute} from 'vue-router'
+
+const currentRoute = useRoute()
+</script>
+
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>About Task Manager</h1>
+
+    <p>Current path: {{ currentRoute.path }} </p>
   </div>
 </template>
 

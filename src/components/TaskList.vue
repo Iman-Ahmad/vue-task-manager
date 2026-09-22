@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type {Task} from '../types'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 defineProps<{
     tasks: Task[]
@@ -14,6 +17,9 @@ function handleDeleteTaskRequest(task: Task) {
     emit('deleteTask', task.id)
 }
 
+function handleTaskDetails(task: Task) {
+  router.push(`/tasks/${task.id}`)
+}
 </script>
 
 <template>
@@ -30,6 +36,10 @@ function handleDeleteTaskRequest(task: Task) {
             </div>
 
             <button @click="handleDeleteTaskRequest(task)">Delete</button>
+
+            <button @click="handleTaskDetails(task)">
+              Details
+            </button>
 
         </li>
     </ul>
