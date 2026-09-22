@@ -38,6 +38,15 @@
     )
 
     const totalTasks = computed (() => tasks.value.length)
+
+    const completedTasks = computed (() =>
+    tasks.value.filter(task => task.completed).length
+    )
+
+    const activeTasks = computed (() =>
+    tasks.value.filter(task => !task.completed).length
+    )
+
     const tasksStartingWithI = computed (() =>
     tasks.value.filter(task => task.title.startsWith('I')))
 
@@ -110,6 +119,12 @@
     </button>
   </div>
 
+  <div>
+    <p>Total: {{totalTasks}}</p>
+    <p>Active: {{activeTasks}}</p>
+    <p>Completed: {{completedTasks}}</p>
+  </div>
+
   <TaskList
   :tasks="filteredTasks"
   @deleteTask="handleDeleteTask"
@@ -124,9 +139,6 @@
     </li>
   </ul>
 
-  
-  <p>Total tasks: {{tasks.length}}</p>
-  <p>Total computed tasks: {{totalTasks}}</p>
   <p v-if="name">Welcome {{name}}</p>
 
   <p v-else>Type your name 🚀</p>
