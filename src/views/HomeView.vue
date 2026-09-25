@@ -74,6 +74,7 @@
       :tasks="filteredTasks"
       @deleteTask="taskStore.deleteTask"
       @toggleCompleted="taskStore.toggleTaskCompleted"
+      @updateTask="taskStore.updateTask"
     />
   </main>
 </template>

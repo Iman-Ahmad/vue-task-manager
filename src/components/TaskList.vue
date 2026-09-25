@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type {Task} from '../types'
 import { useRouter } from 'vue-router'
 
@@ -11,7 +12,11 @@ defineProps<{
 const emit = defineEmits<{
     deleteTask: [id: number]
     toggleCompleted: [id: number]
+    updateTask: [id: number, title: string]
 }>()
+
+const editingTaskId = ref<number | null>(null)
+const editingTitle = ref('')
 
 function handleDeleteTaskRequest(task: Task) {
     emit('deleteTask', task.id)
@@ -20,12 +25,49 @@ function handleDeleteTaskRequest(task: Task) {
 function handleTaskDetails(task: Task) {
   router.push(`/tasks/${task.id}`)
 }
+
+function handleEditTask(task: Task) {
+  editingTaskId.value = task.id
+  editingTitle.value = task.title
+}
+
+function handleSaveTask (task: Task) {
+  emit ('updateTask', task.id, editingTitle.value)
+
+  editingTaskId.value = null
+  editingTitle.value = ''
+}
+
+function handleCancelEdit () {
+  editingTaskId.value = null
+  editingTitle.value = ''
+}
 </script>
 
 <template>
     <ul class="task-list">
-        <li v-for="task in tasks" :key="task.id" :class="{completed: task.completed}">
-            <div class="task-content">
+        <li
+          v-for="task in tasks"
+          :key="task.id"
+          :class="{completed: task.completed}"
+          >
+            <template v-if="editingTaskId === task.id">
+              <input
+                v-model ="editingTitle"
+                class="editInput"
+              />
+
+              <button @click="handleSaveTask(task)">
+                Save
+              </button>
+
+              <button @click="handleCancelEdit">
+                Cancel
+              </button>
+            </template>
+
+            <template v-else>
+              <div class="task-content">
                 <input
                 type = "checkbox"
                 :checked="task.completed"
@@ -33,13 +75,20 @@ function handleTaskDetails(task: Task) {
                 >
 
                 {{task.title}}
-            </div>
+              </div>
 
-            <button @click="handleDeleteTaskRequest(task)">Delete</button>
+              <button @click="handleEditTask(task)">
+                Edit
+              </button>
 
-            <button @click="handleTaskDetails(task)">
-              Details
-            </button>
+              <button @click="handleDeleteTaskRequest(task)">
+                Delete
+              </button>
+
+              <button @click="handleTaskDetails(task)">
+                Details
+              </button>
+            </template>
 
         </li>
     </ul>
