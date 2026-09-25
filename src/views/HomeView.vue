@@ -7,6 +7,19 @@
   const taskStore = useTaskStore()
 
   const taskTitle = ref('')
+  const taskError = ref('')
+
+  function handleAddTask(title: string) {
+    const error = taskStore.addTask(title)
+
+    if (error) {
+      taskError.value = error
+      return
+    }
+
+    taskError.value = ''
+    taskTitle.value = ''
+  }
 
   const selectedFilter = ref<'all' | 'active' | 'completed'>('all')
 
@@ -42,9 +55,13 @@
     <div class="task-form">
       <TaskForm
         v-model:title="taskTitle"
-        @addTask="taskStore.addTask"
+        @addTask="handleAddTask"
       />
     </div>
+
+    <p v-if="taskError" class="task-error">
+      {{ taskError }}
+    </p>
 
     <div class="filters">
       <button @click="selectedFilter = 'all'">

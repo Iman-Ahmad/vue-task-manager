@@ -32,13 +32,13 @@ export const useTaskStore = defineStore('tasks', () => {
     { deep: true }
   )
 
-  function addTask(title: string) {
+  function addTask(title: string): string | null {
     if (!title.trim()) {
-      return
+      return `Task title is required`
     }
 
     if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(title)) {
-      return
+      return `Task title can only contain letters and spaces`
     }
 
     tasks.value.push({
@@ -48,6 +48,8 @@ export const useTaskStore = defineStore('tasks', () => {
     })
 
     nextTaskId++
+
+    return null
   }
 
   function deleteTask(id: number) {
