@@ -21,6 +21,16 @@ function handleToggleTask() {
     taskStore.toggleTaskCompleted(currentTask.value.id)
 }
 
+function handleDeleteTask() {
+    if (!currentTask.value) {
+        return
+    }
+
+    taskStore.deleteTask(currentTask.value.id)
+
+    router.push('/')
+}
+
 function handleBackToTasks() {
     router.push('/')
 }
@@ -50,6 +60,10 @@ function handleBackToTasks() {
                     ? 'Mark as active'
                     : 'Mark as completed'
                 }}
+            </button>
+
+            <button @click="handleDeleteTask">
+                Delete task
             </button>
         </div>
 
