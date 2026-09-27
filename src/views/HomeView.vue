@@ -3,6 +3,8 @@
   import TaskForm from '../components/TaskForm.vue'
   import TaskList from '../components/TaskList.vue'
   import { useTaskStore } from '../stores/tasks'
+  import type { TaskFilter } from '../types'
+  import TaskFilters from '../components/TaskFilters.vue'
 
   const taskStore = useTaskStore()
 
@@ -21,7 +23,7 @@
     taskTitle.value = ''
   }
 
-  const selectedFilter = ref<'all' | 'active' | 'completed'>('all')
+  const selectedFilter = ref<TaskFilter>('all')
 
   const totalTasks = computed(() =>
     taskStore.tasks.length
@@ -75,23 +77,10 @@
       {{ taskError }}
     </p>
 
-    <div class="filters">
-      <button @click="selectedFilter = 'all'">
-        All
-      </button>
-
-      <button @click="selectedFilter = 'active'">
-        Active
-      </button>
-
-      <button @click="selectedFilter = 'completed'">
-        Completed
-      </button>
-
-      <button @click="taskStore.clearCompletedTasks">
-        Clear completed tasks
-      </button>
-    </div>
+    <TaskFilters
+      :selected-filter="selectedFilter"
+      @update-filter="selectedFilter = $event"
+    />
 
     <div class="task-counts">
       <div>Total: {{ totalTasks }}</div>
@@ -129,17 +118,6 @@
 
   .task-form {
     margin-bottom: 24px;
-  }
-
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-
-  .filters button {
-    padding: 8px 14px;
   }
 
   .task-counts {
