@@ -46,6 +46,18 @@
 
     return taskStore.tasks
   })
+  
+  const emptyMessage = computed(() => {
+    if (selectedFilter.value === 'active'){
+      return 'No active tasks.'
+    }
+
+    if (selectedFilter.value === 'completed'){
+      return 'No completed tasks.'
+    }
+
+    return 'No tasks yet.'
+  })
 </script>
 
 <template>
@@ -87,12 +99,18 @@
       <div>Completed: {{ completedTasks }}</div>
     </div>
 
-    <TaskList
-      :tasks="filteredTasks"
-      @deleteTask="taskStore.deleteTask"
-      @toggleCompleted="taskStore.toggleTaskCompleted"
-      @updateTask="taskStore.updateTask"
-    />
+    <div v-if="filteredTasks.length > 0">
+      <TaskList
+        :tasks="filteredTasks"
+        @deleteTask="taskStore.deleteTask"
+        @toggleCompleted="taskStore.toggleTaskCompleted"
+        @updateTask="taskStore.updateTask"
+      />
+    </div>
+
+    <p v-else class="empty-message">
+      {{ emptyMessage }}
+    </p>
   </main>
 </template>
 
@@ -137,5 +155,11 @@
   flex: 1;
   text-align: center;
   font-weight: 600;
+}
+
+.empty-message {
+  margin: 32px 0;
+  text-align: center;
+  opacity: 0.7;
 }
 </style>
