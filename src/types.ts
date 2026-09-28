@@ -11,4 +11,3 @@ export interface Task extends TaskMetadata {
   completed: boolean
 }
 
-export type FilterChangeHandler = (filter: TaskFilter) => void

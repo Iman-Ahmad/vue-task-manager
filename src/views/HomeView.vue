@@ -48,6 +48,10 @@
 
     return taskStore.tasks
   })
+
+  function handleFilterChange(filter: TaskFilter): void {
+    selectedFilter.value = filter
+  }
   
   const emptyMessage = computed(() => {
     if (selectedFilter.value === 'active'){
@@ -79,7 +83,7 @@
 
     <TaskFilters
       :selected-filter="selectedFilter"
-      @update-filter="selectedFilter = $event"
+      @update-filter="handleFilterChange"
     />
 
     <div class="task-counts">
