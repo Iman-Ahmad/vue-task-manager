@@ -11,3 +11,8 @@ export interface Task extends TaskMetadata {
   completed: boolean
 }
 
+export interface TaskApiResponse {
+  id: number
+  title: string
+  completed: boolean
+}
