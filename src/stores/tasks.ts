@@ -7,10 +7,30 @@ function loadSavedTasks(): Task[] {
 
   if (!savedTasks) {
     return [
-      { id: 1, title: 'Cleaning', completed: false },
-      { id: 2, title: 'Running', completed: false },
-      { id: 3, title: 'Coding', completed: false },
-      { id: 4, title: 'Cooking', completed: false },
+      {
+        id: 1,
+        title: 'Cleaning',
+        completed: false,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: 2,
+        title: 'Running',
+        completed: false,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: 3,
+        title: 'Coding',
+        completed: false,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: 4,
+        title: 'Cooking',
+        completed: false,
+        createdAt: new Date().toISOString(),
+      },
     ]
   }
 
@@ -45,6 +65,7 @@ export const useTaskStore = defineStore('tasks', () => {
       id: nextTaskId,
       title: title.trim(),
       completed: false,
+      createdAt: new Date().toISOString(),
     })
 
     nextTaskId++
