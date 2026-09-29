@@ -2,6 +2,7 @@
   import { computed, ref } from 'vue'
   import { useTaskStore } from '../stores/tasks'
   import type { TaskApiResponse, TaskFilter } from '../types'
+  import { fetchTask } from '../services/taskApi'
   import TaskForm from '../components/TaskForm.vue'
   import TaskList from '../components/TaskList.vue'
   import TaskFilters from '../components/TaskFilters.vue'
@@ -57,48 +58,20 @@
     selectedFilter.value = filter
   }
 
-  function isTaskApiResponse(value: unknown): value is TaskApiResponse {
-    if (typeof value !== 'object' || value === null) {
-      return false
-    }
-
-    const data = value as Record<string, unknown>
-
-    return (
-      typeof data.id === 'number' &&
-      typeof data.title === 'string' &&
-      typeof data.completed === 'boolean'
-    )
-  }
-
   async function testApiRequest(): Promise<void> {
-    isLoading.value = true 
+    isLoading.value = true
     apiError.value = ''
     apiTask.value = null
 
     try {
-      const response = await fetch(
-        'https://jsonplaceholder.typicode.com/todos/1'
-      )
+      const task = await fetchTask()
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`)
-      }
-
-      const data: unknown = await response.json()
-
-      if (!isTaskApiResponse(data)) {
-        throw new Error('Invalid task data received from API')
-      }
-
-      apiTask.value = data
+      apiTask.value = task
     }
-
     catch (error) {
       apiError.value = 'Failed to load task.'
       console.error('API request failed:', error)
     }
-
     finally {
       isLoading.value = false
     }
