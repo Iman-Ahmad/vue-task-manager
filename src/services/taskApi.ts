@@ -1,6 +1,6 @@
-import type { Task, TaskApiResponse } from '../types'
+import type { Task, ApiTask } from '../types'
 
-function isTaskApiResponse(value: unknown): value is TaskApiResponse {
+function isTaskApiResponse(value: unknown): value is ApiTask {
   if (typeof value !== 'object' || value === null) {
     return false
   }
@@ -14,7 +14,13 @@ function isTaskApiResponse(value: unknown): value is TaskApiResponse {
   )
 }
 
-function mapApiTaskToTask(apiTask: TaskApiResponse): Task {
+function isTaskApiResponseList(value: unknown): value is ApiTask[] {
+  return (
+    Array.isArray(value) && value.every(isTaskApiResponse)
+  )
+}
+
+function mapApiTaskToTask(apiTask: ApiTask): Task {
     return {
         id: apiTask.id,
         title: apiTask.title,
@@ -39,4 +45,20 @@ export async function fetchTask(): Promise<Task> {
   }
 
   return mapApiTaskToTask(data)
+}
+
+export async function fetchTasks(): Promise<Task[]> {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos')
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`)
+  }
+
+  const data: unknown = await response.json()
+
+  if (!isTaskApiResponseList(data)) {
+    throw new Error(`Invalid task list received from API`)
+  }
+
+  return data.map(mapApiTaskToTask)
 }

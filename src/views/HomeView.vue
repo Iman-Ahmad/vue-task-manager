@@ -2,7 +2,7 @@
   import { computed, ref } from 'vue'
   import { useTaskStore } from '../stores/tasks'
   import type { Task, TaskFilter } from '../types'
-  import { fetchTask } from '../services/taskApi'
+  import { fetchTasks } from '../services/taskApi'
   import TaskForm from '../components/TaskForm.vue'
   import TaskList from '../components/TaskList.vue'
   import TaskFilters from '../components/TaskFilters.vue'
@@ -14,7 +14,7 @@
 
   const isLoading = ref(false)
   const apiError = ref('')
-  const apiTask = ref<Task | null>(null)
+  const apiTasks = ref<Task[]>([])
 
   function handleAddTask(title: string) {
     const error = taskStore.addTask(title)
@@ -61,15 +61,15 @@
   async function testApiRequest(): Promise<void> {
     isLoading.value = true
     apiError.value = ''
-    apiTask.value = null
+    apiTasks.value = []
 
     try {
-      const task = await fetchTask()
+      const tasks = await fetchTasks()
 
-      apiTask.value = task
+      apiTasks.value = tasks
     }
     catch (error) {
-      apiError.value = 'Failed to load task.'
+      apiError.value = 'Failed to load tasks.'
       console.error('API request failed:', error)
     }
     finally {
@@ -106,13 +106,8 @@
       {{ apiError }}
     </p>
 
-    <div v-if="apiTask">
-      <p>ID: {{ apiTask.id }} </p>
-      <p>Title: {{ apiTask.title }} </p>
-      <p>
-        Completed:
-        {{ apiTask.completed ? 'Yes' : 'No' }}
-      </p>
+    <div v-if="apiTasks.length > 0">
+      <p>API tasks loaded: {{apiTasks.length }} </p>
     </div>
 
     <div class="task-form">
