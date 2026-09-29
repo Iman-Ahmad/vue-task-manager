@@ -1,4 +1,4 @@
-import type { TaskApiResponse } from '../types'
+import type { Task, TaskApiResponse } from '../types'
 
 function isTaskApiResponse(value: unknown): value is TaskApiResponse {
   if (typeof value !== 'object' || value === null) {
@@ -14,7 +14,16 @@ function isTaskApiResponse(value: unknown): value is TaskApiResponse {
   )
 }
 
-export async function fetchTask(): Promise<TaskApiResponse> {
+function mapApiTaskToTask(apiTask: TaskApiResponse): Task {
+    return {
+        id: apiTask.id,
+        title: apiTask.title,
+        completed: apiTask.completed,
+        createdAt: new Date().toISOString(),
+    }
+}
+
+export async function fetchTask(): Promise<Task> {
   const response = await fetch(
     'https://jsonplaceholder.typicode.com/todos/1'
   )
@@ -29,5 +38,5 @@ export async function fetchTask(): Promise<TaskApiResponse> {
     throw new Error('Invalid task data received from API')
   }
 
-  return data
+  return mapApiTaskToTask(data)
 }

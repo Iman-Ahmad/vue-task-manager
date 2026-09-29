@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref } from 'vue'
   import { useTaskStore } from '../stores/tasks'
-  import type { TaskApiResponse, TaskFilter } from '../types'
+  import type { Task, TaskFilter } from '../types'
   import { fetchTask } from '../services/taskApi'
   import TaskForm from '../components/TaskForm.vue'
   import TaskList from '../components/TaskList.vue'
@@ -14,7 +14,7 @@
 
   const isLoading = ref(false)
   const apiError = ref('')
-  const apiTask = ref<TaskApiResponse | null>(null)
+  const apiTask = ref<Task | null>(null)
 
   function handleAddTask(title: string) {
     const error = taskStore.addTask(title)
