@@ -1,54 +1,79 @@
-# my-vue-app
+# Vue Task Manager
 
-This template should help get you started developing with Vue 3 in Vite.
+A task management application built with Vue 3 and TypeScript as a hands-on learning project.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+* Create, edit, delete, and complete tasks
+* Filter tasks by all, active, or completed
+* Task counters
+* Clear completed tasks
+* Form validation
+* Task details page
+* Vue Router navigation
+* Persistent local tasks using `localStorage`
+* API integration with loading and error states
+* Runtime validation of API responses
+* Mapping external API data to the application's task model
 
-## Recommended Browser Setup
+## Technologies
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+* Vue 3
+* TypeScript
+* Pinia
+* Vue Router
+* Vite
+* REST API
+* Git & GitHub
 
-## Type Support for `.vue` Imports in TS
+## Project Structure
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+```text
+src/
+├── components/
+├── services/
+│   └── taskApi.ts
+├── stores/
+│   └── tasks.ts
+├── views/
+├── types.ts
+└── router/
+```
 
-## Customize configuration
+The project separates responsibilities between:
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+* **Views** — page-level UI and user interactions
+* **Components** — reusable UI pieces
+* **Pinia Store** — application state and actions
+* **API Service** — communication with the external API
+* **Types** — shared TypeScript models
 
-## Project Setup
+## API
 
-```sh
+The project uses JSONPlaceholder as a demo API for loading task data.
+
+API data is validated at runtime before being mapped into the application's internal `Task` model.
+
+## Run Locally
+
+Install dependencies:
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+Start the development server:
 
-```sh
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Run the production build:
 
-```sh
+```bash
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## Purpose
 
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+This project was built as a practical learning project to gain hands-on experience with Vue 3, TypeScript, state management, routing, local storage, API integration, and Git-based development.
