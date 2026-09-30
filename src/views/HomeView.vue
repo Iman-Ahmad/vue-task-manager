@@ -2,7 +2,6 @@
   import { computed, ref } from 'vue'
   import { useTaskStore } from '../stores/tasks'
   import type { Task, TaskFilter } from '../types'
-  import { fetchTasks } from '../services/taskApi'
   import TaskForm from '../components/TaskForm.vue'
   import TaskList from '../components/TaskList.vue'
   import TaskFilters from '../components/TaskFilters.vue'
@@ -11,10 +10,6 @@
 
   const taskTitle = ref('')
   const taskError = ref('')
-
-  const isLoading = ref(false)
-  const apiError = ref('')
-  const apiTasks = ref<Task[]>([])
 
   function handleAddTask(title: string) {
     const error = taskStore.addTask(title)
@@ -57,26 +52,11 @@
   function handleFilterChange(filter: TaskFilter): void {
     selectedFilter.value = filter
   }
-
-  async function testApiRequest(): Promise<void> {
-    isLoading.value = true
-    apiError.value = ''
-    apiTasks.value = []
-
-    try {
-      const tasks = await fetchTasks()
-
-      apiTasks.value = tasks
-    }
-    catch (error) {
-      apiError.value = 'Failed to load tasks.'
-      console.error('API request failed:', error)
-    }
-    finally {
-      isLoading.value = false
-    }
-  }
   
+  async function handleLoadApiTasks(): Promise<void> {
+    await taskStore.loadApiTasks()
+  }
+
   const emptyMessage = computed(() => {
     if (selectedFilter.value === 'active'){
       return 'No active tasks.'
@@ -94,20 +74,20 @@
   <main class="page">
     <h1>Ready to complete your tasks?!</h1>
 
-    <button @click="testApiRequest">
-      Test API
+    <button @click="handleLoadApiTasks">
+      Load API Tasks
     </button>
 
-    <p v-if="isLoading">
+    <p v-if="taskStore.isApiLoading">
       Loading...
     </p>
 
-    <p v-if="apiError">
-      {{ apiError }}
+    <p v-if="taskStore.apiError">
+      {{ taskStore.apiError }}
     </p>
 
-    <div v-if="apiTasks.length > 0">
-      <p>API tasks loaded: {{apiTasks.length }} </p>
+    <div v-if="taskStore.apiTasks.length > 0">
+      <p>API tasks loaded: {{ taskStore.apiTasks.length }}</p>
     </div>
 
     <div class="task-form">

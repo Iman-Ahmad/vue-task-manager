@@ -1,6 +1,7 @@
 import { ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import type { Task } from '../types'
+import { fetchTasks } from '../services/taskApi'
 
 function loadSavedTasks(): Task[] {
   const savedTasks = localStorage.getItem('tasks')
@@ -39,6 +40,10 @@ function loadSavedTasks(): Task[] {
 
 export const useTaskStore = defineStore('tasks', () => {
   const tasks = ref<Task[]>(loadSavedTasks())
+
+  const apiTasks = ref<Task[]>([])
+  const isApiLoading = ref(false)
+  const apiError = ref('')
 
   let nextTaskId = tasks.value.length
     ? Math.max(...tasks.value.map(task => task.id)) + 1
@@ -105,6 +110,26 @@ export const useTaskStore = defineStore('tasks', () => {
     tasks.value = tasks.value.filter(task => !task.completed)
   }
 
+  async function loadApiTasks(): Promise<void> {
+    isApiLoading.value = true
+    apiError.value = ''
+
+    try {
+      const loadedTasks = await fetchTasks()
+
+      apiTasks.value = loadedTasks
+    }
+
+    catch(error){
+      apiError.value = 'Failed to load tasks from API.'
+      console.error('API request failed: ', error)
+    }
+
+    finally {
+      isApiLoading.value = false
+    }
+  }
+
   return {
     tasks,
     addTask,
@@ -112,5 +137,9 @@ export const useTaskStore = defineStore('tasks', () => {
     updateTask,
     toggleTaskCompleted,
     clearCompletedTasks,
+    apiTasks,
+    isApiLoading,
+    apiError,
+    loadApiTasks,
   }
 })
