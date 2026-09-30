@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useTaskStore } from '../stores/tasks'
   import type { Task, TaskFilter } from '../types'
   import TaskForm from '../components/TaskForm.vue'
@@ -7,6 +7,9 @@
   import TaskFilters from '../components/TaskFilters.vue'
 
   const taskStore = useTaskStore()
+  onMounted(() => {
+    taskStore.loadApiTasks()
+  })
 
   const taskTitle = ref('')
   const taskError = ref('')
@@ -52,10 +55,6 @@
   function handleFilterChange(filter: TaskFilter): void {
     selectedFilter.value = filter
   }
-  
-  async function handleLoadApiTasks(): Promise<void> {
-    await taskStore.loadApiTasks()
-  }
 
   const emptyMessage = computed(() => {
     if (selectedFilter.value === 'active'){
@@ -74,21 +73,21 @@
   <main class="page">
     <h1>Ready to complete your tasks?!</h1>
 
-    <button @click="handleLoadApiTasks">
-      Load API Tasks
-    </button>
+    <section class="api-status">
+      <h2>API Demo</h2>
 
-    <p v-if="taskStore.isApiLoading">
-      Loading...
-    </p>
+      <p v-if="taskStore.isApiLoading">
+        Loading tasks from API...
+      </p>
 
-    <p v-if="taskStore.apiError">
-      {{ taskStore.apiError }}
-    </p>
+      <p v-else-if="taskStore.apiError" class="api-error">
+        {{ taskStore.apiError }}
+      </p>
 
-    <div v-if="taskStore.apiTasks.length > 0">
-      <p>API tasks loaded: {{ taskStore.apiTasks.length }}</p>
-    </div>
+      <p v-else>
+        Loaded {{ taskStore.apiTasks.length }} tasks from the API.
+      </p>
+    </section>
 
     <div class="task-form">
       <TaskForm
@@ -138,6 +137,25 @@
 
   h1 {
     margin-bottom: 24px;
+  }
+  .api-status {
+    margin-bottom: 24px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .api-status h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .api-status p {
+    margin: 0;
+  }
+
+  .api-error {
+    color: #c0392b;
   }
 
   .task-form {
